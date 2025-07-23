@@ -47,7 +47,6 @@ public class Block
     {
         string result = "";
 
-        result += Id.ToString();
         result += Data;
         result += Created.ToString("dd.MM.yyyy HH:mm:ss");
         result += PreviousHash;

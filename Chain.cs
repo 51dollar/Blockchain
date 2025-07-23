@@ -7,11 +7,27 @@ public class Chain
 
     public Chain()
     {
-        Blocks = new List<Block>();
-        var genesisBlock = new Block();
-        
-        Blocks.Add(genesisBlock);
-        LastBlock = genesisBlock;
+        Blocks = LoadChainFromDb();
+
+        if (Blocks.Count == 0)
+        {
+            var genesisBlock = new Block();
+
+            Blocks.Add(genesisBlock);
+            LastBlock = genesisBlock;
+            Save(LastBlock);
+        }
+        else
+        {
+            if (Check())
+            {
+                LastBlock = Blocks.Last();
+            }
+            else
+            {
+                throw new Exception("Error getting blocks from database");
+            }
+        }
     }
 
     public void Add(string data, string user)
@@ -48,5 +64,21 @@ public class Chain
             context.Blocks.Add(block);
             context.SaveChanges();
         }
+    }
+
+    private List<Block> LoadChainFromDb()
+    {
+        List<Block> result;
+
+        using (var context = new BlockchainContext())
+        {
+            var count = context.Blocks.Count();
+
+            result = new List<Block>(count * 2);
+
+            result.AddRange(context.Blocks);
+        }
+
+        return result;
     }
 }

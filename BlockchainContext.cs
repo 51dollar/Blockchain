@@ -2,7 +2,7 @@
 
 namespace Blockchain
 {
-    internal class BlockchainContext : DbContext 
+    public class BlockchainContext : DbContext 
     {
         public BlockchainContext()
         { }

@@ -13,19 +13,13 @@ public partial class Form1 : Form
     {
         listBox.Items.Clear();
 
-        _chain.Add(textBox1.Text, "Admin");
+        _chain.Add(textBox1.Text, "User");
 
-        foreach (var block in _chain.Blocks)
-        {
-            listBox.Items.Add(block);
-        }
+        listBox.Items.AddRange(_chain.Blocks.ToArray());
     }
 
     private void Form1_Load(object sender, EventArgs e)
     {
-        foreach (var block in _chain.Blocks)
-        {
-            listBox.Items.Add(block);
-        }
+            listBox.Items.AddRange(_chain.Blocks.ToArray());
     }
 }
