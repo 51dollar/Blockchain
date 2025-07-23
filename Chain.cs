@@ -19,6 +19,7 @@ public class Chain
         var block = new Block(data, user, LastBlock);
         Blocks.Add(block);
         LastBlock = block;
+        Save(block);
     }
 
     public bool Check()
@@ -38,5 +39,14 @@ public class Chain
             previousHash = block.Hash;
         } 
         return true;
+    }
+
+    private void Save(Block block)
+    {
+        using (var context = new BlockchainContext())
+        {
+            context.Blocks.Add(block);
+            context.SaveChanges();
+        }
     }
 }
