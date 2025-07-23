@@ -20,4 +20,23 @@ public class Chain
         Blocks.Add(block);
         LastBlock = block;
     }
+
+    public bool Check()
+    {
+        var genesisBlock = new Block();
+        var previousHash = genesisBlock.Hash;
+
+        foreach (var block in Blocks.Skip(1))
+        {
+            var hash = block.PreviousHash;
+
+            if (previousHash != hash) 
+            {
+                return false;
+            }
+
+            previousHash = block.Hash;
+        } 
+        return true;
+    }
 }
