@@ -1,15 +1,23 @@
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace Blockchain;
 
+[DataContract]
 public class Block
 {
     public int Id { get; private set;}
+    [DataMember]
     public string Data { get; private set; }
+    [DataMember]
     public DateTime Created { get; private set; }
+    [DataMember]
     public string Hash { get; private set; }
+    [DataMember]
     public string PreviousHash { get; private set; }
+    [DataMember]
     public string User { get; set; }
 
     public Block()
@@ -72,5 +80,28 @@ public class Block
     public override string ToString()
     {
         return Data;
+    }
+
+    public string Serialize()
+    {
+        var jsonSerializer = new DataContractJsonSerializer(typeof(Block));
+
+        using (var ms = new MemoryStream())
+        {
+            jsonSerializer.WriteObject(ms, this);
+            var result = Encoding.UTF8.GetString(ms.ToArray());
+            return result;
+        }
+    }
+
+    public static Block Deserialize(string json)
+    {
+        var jsonSerializer = new DataContractJsonSerializer(typeof(Block));
+
+        using (var ms = new MemoryStream(Encoding.UTF8.GetBytes(json)))
+        {
+            var result = (Block)jsonSerializer.ReadObject(ms);
+            return result;
+        }
     }
 }
